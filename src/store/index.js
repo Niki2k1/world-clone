@@ -1,5 +1,8 @@
 import Dictionary from '@/Dictionary'
 import { createStore } from 'vuex'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 export default createStore({
   state: {
@@ -49,6 +52,16 @@ export default createStore({
         state.currentCol++
       }
 
+      if (state.currentRow === 6 && state.currentCol === 0) {
+        toast.error(
+          `Schade! Du hast das Wort leider nicht erraten können. Es wäre: "${state.wordToGuess}" gewesen!`,
+          {
+            timeout: false,
+            onClose: () => { restart(state) }
+          }
+        )
+      }
+
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 5; j++) {
           state.tiles[i][j].focus = false
@@ -62,10 +75,13 @@ export default createStore({
         if (!state.checkedRows.includes(state.currentRow - 1)) {
           state.currentRow--
           state.currentCol = 4
-          // TODO: Toast
+        } else {
+          toast.error('Die Reihe auf die zurück gesprungen werden soll wurde bereits eingeloggt.', { timeout: 2000 })
         }
       } else {
-        state.currentCol--
+        if (state.currentCol !== 0) {
+          state.currentCol--
+        }
       }
 
       for (let i = 0; i < 6; i++) {
@@ -119,9 +135,34 @@ export default createStore({
   }
 })
 
+const restart = (state) => {
+  console.log('RESTART')
+
+  const tiles = []
+  
+  for (let i = 0; i < 6; i++) {
+    if (!tiles[i]) tiles[i] = []
+    for (let j = 0; j < 5; j++) {
+      tiles[i].push({ value: '', color: '', focus: false })
+    }
+  }
+
+  state.tiles = tiles
+  state.tiles[0][0].focus = true
+  state.currentCol = 0,
+  state.currentRow = 0,
+  state.currentWord = '',
+  state.checkedRows = []
+
+  state.wordToGuess = Dictionary.getRandomWord()
+}
+
 const check = (state) => {
   if (state.wordToGuess === state.currentWord) {
-    console.log('WON')
+    toast.success(`Richtig! Du hast das Wort "${state.wordToGuess}" erfolgreich erraten!`, {
+      timeout: false,
+      onClose: () => { restart(state) }
+    })
 
     for (const tile of state.tiles[state.currentRow]) {
       tile.color = 'green'
