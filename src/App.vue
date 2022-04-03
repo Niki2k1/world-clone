@@ -2,16 +2,19 @@
   <app-bar />
   <router-view />
   <key-board />
+  <footer-bar />
 </template>
 
 <script>
 import AppBar from '@/components/AppBar.vue'
 import KeyBoard from '@/components/KeyBoard.vue'
+import FooterBar from '@/components/FooterBar.vue'
 
 export default {
   components: {
     AppBar,
-    KeyBoard
+    KeyBoard,
+    FooterBar
   },
   mounted () {
     this.$store.dispatch('init')
