@@ -52,15 +52,16 @@ export default {
 
 <style scoped>
 #keyBoard {
+  margin: auto 0 2rem 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  gap: 1rem 1rem;
+  gap: .25rem;
 }
 
 button {
-  padding: 1.5rem;
-  font-size: 1.5rem;
+  padding: .5rem;
+  font-size: .75rem;
   background-color: transparent;
   border: 1px solid var(--border);
   border-radius: 3px;

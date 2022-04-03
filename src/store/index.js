@@ -8,7 +8,8 @@ export default createStore({
     wordToGuess: '',
     currentCol: 0,
     currentRow: 0,
-    currentWord: ''
+    currentWord: '',
+    checkedRows: []
   },
   getters: {
     darkMode (state) {
@@ -39,47 +40,9 @@ export default createStore({
     setWordToGuess (state, word) {
       state.wordToGuess = word
     },
-    check (state) {
-      if (state.wordToGuess === state.currentWord) {
-        console.log('WON')
-
-        for (const tile of state.tiles) {
-          tile.color = 'green'
-        }
-      } else {
-        const matchedPos = []
-        const matched = []
-        for (let i = 0; i < state.currentWord.length; i++) {
-          // Check if char is at right pos and equal (green)
-          if (state.wordToGuess[i] === state.currentWord[i]) {
-            matchedPos.push(state.currentWord[i])
-          }
-
-          // Check if word to guess includes the char (yellow)
-          if (state.wordToGuess.includes(state.currentWord[i])) {
-            if (!matchedPos.includes(state.currentWord[i])) {
-              matched.push(state.currentWord[i])
-            }
-          }
-
-          const matchedPosTiles = state.tiles.filter(tile => matchedPos.includes(tile.value))
-          const matchedTiles = state.tiles.filter(tile => matched.includes(tile.value))
-
-          for (const tile of matchedPosTiles) {
-            tile.color = 'green'
-          }
-
-          for (const tile of matchedTiles) {
-            tile.color = 'yellow'
-          }
-        }
-
-        state.currentWord = ''
-        state.typeCount = 0
-      }
-    },
     setCursorNextPos (state) {
       if (state.currentCol === 4) {
+        check(state)
         state.currentRow++
         state.currentCol = 0
       } else {
@@ -95,9 +58,12 @@ export default createStore({
       state.tiles[state.currentRow][state.currentCol].focus = true
     },
     setCursorPrevPos (state) {
-      if (state.currentRow > 1 && state.currentCol === 0) {
-        state.currentRow--
-        state.currentCol = 4
+      if (state.currentRow > 0 && state.currentCol === 0) {
+        if (!state.checkedRows.includes(state.currentRow - 1)) {
+          state.currentRow--
+          state.currentCol = 4
+          // TODO: Toast
+        }
       } else {
         state.currentCol--
       }
@@ -110,6 +76,7 @@ export default createStore({
 
       state.tiles[state.currentRow][state.currentCol].focus = true
       state.tiles[state.currentRow][state.currentCol].value = ''
+      state.tiles[state.currentRow][state.currentCol].color = ''
       state.currentWord = state.currentWord.slice(0, -1)
     },
     setChar (state, char) {
@@ -122,14 +89,14 @@ export default createStore({
       commit('setDarkMode', !state.darkMode)
     },
     setChar ({ commit, state, getters }, char) {
+      if (state.currentCol === 5) commit('check')
+
       if (char === '<-') {
         commit('setCursorPrevPos')
       } else {
         commit('setChar', char)
         commit('setCursorNextPos')
       }
-
-      if (state.currentCol === 4) commit('check')
     },
     setFocus ({ commit }, tile) {
       commit('setFocus', tile)
@@ -151,3 +118,43 @@ export default createStore({
   modules: {
   }
 })
+
+const check = (state) => {
+  if (state.wordToGuess === state.currentWord) {
+    console.log('WON')
+
+    for (const tile of state.tiles[state.currentRow]) {
+      tile.color = 'green'
+    }
+  } else {
+    const matchedPos = []
+    const matched = []
+    for (let i = 0; i < state.currentWord.length; i++) {
+      // Check if char is at right pos and equal (green)
+      if (state.wordToGuess[i] === state.currentWord[i]) {
+        matchedPos.push(state.currentWord[i])
+      }
+
+      // Check if word to guess includes the char (yellow)
+      if (state.wordToGuess.includes(state.currentWord[i])) {
+        if (!matchedPos.includes(state.currentWord[i])) {
+          matched.push(state.currentWord[i])
+        }
+      }
+
+      const matchedPosTiles = state.tiles[state.currentRow].filter(tile => matchedPos.includes(tile.value))
+      const matchedTiles = state.tiles[state.currentRow].filter(tile => matched.includes(tile.value))
+
+      for (const tile of matchedPosTiles) {
+        tile.color = 'green'
+      }
+
+      for (const tile of matchedTiles) {
+        tile.color = 'yellow'
+      }
+    }
+
+    state.currentWord = ''
+    state.checkedRows.push(state.currentRow)
+  }
+}

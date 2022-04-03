@@ -1,7 +1,5 @@
 <template>
-  <div id="home">
-    <word-grid />
-  </div>
+  <word-grid />
 </template>
 
 <script>
@@ -12,10 +10,3 @@ export default {
   components: { WordGrid }
 }
 </script>
-
-<style scoped>
-#home {
-  display: flex;
-  justify-content: center;
-}
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div id="app-bar">
     <button @click="toggle">{{ darkMode ? '☀️' : '🌑' }}</button>
-    <h1>Worldl</h1>
+    <h1>Wortel</h1>
     <button></button>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
 
 <style scoped>
 #app-bar {
-  width: 30rem;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

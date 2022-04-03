@@ -27,22 +27,32 @@ export default {
 <style scoped>
 .grid {
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  grid-template-rows: repeat(6, 4rem);
+  gap: .5rem;
   margin-bottom: 2rem;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(5, 4rem);
+  gap: .5rem;
 }
 
 .item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid var(--border);
-  height: 5rem;
-  width: 5rem;
+  height: 100%;
+  width: 100%;
   cursor: pointer;
+}
+
+.item h1 {
+  margin: 0;
 }
 
 .focus {

@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <app-bar />
-    <router-view />
-    <key-board />
-  </div>
+  <app-bar />
+  <router-view />
+  <key-board />
 </template>
 
 <script>
@@ -55,6 +53,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
 
 #app {
@@ -62,5 +66,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
 </style>
