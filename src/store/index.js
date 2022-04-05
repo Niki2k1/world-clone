@@ -139,7 +139,7 @@ const restart = (state) => {
   console.log('RESTART')
 
   const tiles = []
-  
+
   for (let i = 0; i < 6; i++) {
     if (!tiles[i]) tiles[i] = []
     for (let j = 0; j < 5; j++) {
@@ -149,9 +149,9 @@ const restart = (state) => {
 
   state.tiles = tiles
   state.tiles[0][0].focus = true
-  state.currentCol = 0,
-  state.currentRow = 0,
-  state.currentWord = '',
+  state.currentCol = 0
+  state.currentRow = 0
+  state.currentWord = ''
   state.checkedRows = []
 
   state.wordToGuess = Dictionary.getRandomWord()
@@ -186,12 +186,12 @@ const check = (state) => {
       const matchedPosTiles = state.tiles[state.currentRow].filter(tile => matchedPos.includes(tile.value))
       const matchedTiles = state.tiles[state.currentRow].filter(tile => matched.includes(tile.value))
 
-      for (const tile of matchedPosTiles) {
-        tile.color = 'green'
-      }
-
       for (const tile of matchedTiles) {
         tile.color = 'yellow'
+      }
+
+      for (const tile of matchedPosTiles) {
+        tile.color = 'green'
       }
     }
 
