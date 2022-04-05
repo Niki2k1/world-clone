@@ -12,7 +12,8 @@ export default createStore({
     currentCol: 0,
     currentRow: 0,
     currentWord: '',
-    checkedRows: []
+    checkedRows: [],
+    blocked: []
   },
   getters: {
     darkMode (state) {
@@ -168,33 +169,24 @@ const check = (state) => {
       tile.color = 'green'
     }
   } else {
-    const matchedPos = []
-    const matched = []
     for (let i = 0; i < state.currentWord.length; i++) {
       // Check if char is at right pos and equal (green)
       if (state.wordToGuess[i] === state.currentWord[i]) {
-        matchedPos.push(state.currentWord[i])
-      }
-
-      // Check if word to guess includes the char (yellow)
-      if (state.wordToGuess.includes(state.currentWord[i])) {
-        if (!matchedPos.includes(state.currentWord[i])) {
-          matched.push(state.currentWord[i])
-        }
-      }
-
-      const matchedPosTiles = state.tiles[state.currentRow].filter(tile => matchedPos.includes(tile.value))
-      const matchedTiles = state.tiles[state.currentRow].filter(tile => matched.includes(tile.value))
-
-      for (const tile of matchedTiles) {
-        tile.color = 'yellow'
-      }
-
-      for (const tile of matchedPosTiles) {
-        tile.color = 'green'
+        state.tiles[state.currentRow][i].color = 'green'
+        state.blocked.push(state.currentWord[i])
       }
     }
 
+    for (let i = 0; i < state.currentWord.length; i++) {
+      // Check if word to guess includes the char (yellow)
+      if (state.wordToGuess.includes(state.currentWord[i])) {
+        if (!state.blocked.includes(state.currentWord[i])) {
+          state.tiles[state.currentRow][i].color = 'yellow'
+        }
+      }
+    }
+
+    state.blocked = []
     state.currentWord = ''
     state.checkedRows.push(state.currentRow)
   }
