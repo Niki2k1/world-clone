@@ -6,7 +6,7 @@ export default class Dictionary {
     const word = german[randomIndex]
 
     const wonWords = JSON.parse(localStorage.getItem('wonWords'))
-    if (wonWords.includes(word)) {
+    if (wonWords && wonWords.includes(word)) {
       return this.getRandomWord()
     }
 
