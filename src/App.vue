@@ -9,7 +9,6 @@
 import AppBar from '@/components/AppBar.vue'
 import KeyBoard from '@/components/KeyBoard.vue'
 import FooterBar from '@/components/FooterBar.vue'
-import { useToast } from 'vue-toastification'
 
 export default {
   components: {
