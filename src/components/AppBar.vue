@@ -2,11 +2,12 @@
   <div id="app-bar">
     <button @click="toggle">{{ darkMode ? '☀️' : '🌑' }}</button>
     <h1>Wortel</h1>
-    <button></button>
+    <h1>{{ wonWords }} / {{ wordListLength }}</h1>
   </div>
 </template>
 
 <script>
+import Dictionary from '@/Dictionary'
 import { mapGetters } from 'vuex'
 export default {
   methods: {
@@ -15,8 +16,12 @@ export default {
     }
   },
   computed: {
+    wordListLength () {
+      return Dictionary.getWordListLength()
+    },
     ...mapGetters({
-      darkMode: 'darkMode'
+      darkMode: 'darkMode',
+      wonWords: 'wonWords'
     })
   }
 }

@@ -13,7 +13,8 @@ export default createStore({
     currentRow: 0,
     currentWord: '',
     checkedRows: [],
-    blocked: []
+    blocked: [],
+    wonWords: 0
   },
   getters: {
     darkMode (state) {
@@ -24,6 +25,9 @@ export default createStore({
     },
     currentTile (state) {
       return state.tiles[state.currentRow][state.currentPos]
+    },
+    wonWords (state) {
+      return state.wonWords
     }
   },
   mutations: {
@@ -43,6 +47,7 @@ export default createStore({
     },
     setWordToGuess (state, word) {
       state.wordToGuess = word
+      state.wonWords = Dictionary.getWonWordsCount()
     },
     setCursorNextPos (state) {
       if (state.currentCol === 4) {
@@ -168,6 +173,17 @@ const check = (state) => {
     for (const tile of state.tiles[state.currentRow]) {
       tile.color = 'green'
     }
+
+    let wonWords = JSON.parse(localStorage.getItem('wonWords'))
+    if (!wonWords) {
+      wonWords = []
+    }
+
+    wonWords.push(state.wordToGuess)
+
+    localStorage.setItem('wonWords', JSON.stringify(wonWords))
+
+    state.wonWords = Dictionary.getWonWordsCount()
   } else {
     for (let i = 0; i < state.currentWord.length; i++) {
       // Check if char is at right pos and equal (green)
